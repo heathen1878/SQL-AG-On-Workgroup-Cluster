@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageNamePrefix": {
+            "type": "string",
+            "maxLength": 11,
+            "defaultValue": "storage",
+            "metadata": {
+                "description": "The value to use for starting the storage account name."
+            }
+        }
+    },
+    "variables": {
+        "storageName": "[concat(parameters('storageNamePrefix'), uniqueString(resourceGroup().id))]"  
+    },
+    "resources": [
+        {
+            "comments": "",
+            "type": "Microsoft.Storage/storageAccounts",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "Storage",
+            "name": "[variables('storageName')]",
+            "apiVersion": "2016-01-01",
+            "location": "[resourceGroup().location]",
+            "tags": {},
+            "scale": null,
+            "properties": {
+                "encryption": {
+                    "keySource": "Microsoft.Storage",
+                    "services": {
+                        "blob": {
+                            "enabled": true
+                        }
+                    }
+                }
+            },
+            "dependsOn": []
+        }
+    ]
+}
